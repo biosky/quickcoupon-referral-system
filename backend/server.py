@@ -258,6 +258,22 @@ async def get_shopkeeper_profile(current_user: User = Depends(get_current_user))
     
     return profile
 
+@api_router.delete("/shopkeeper/profile")
+async def delete_shopkeeper_profile(current_user: User = Depends(get_current_user)):
+    if current_user.role != 'shopkeeper':
+        raise HTTPException(status_code=403, detail="Only shopkeepers can delete profile")
+    
+    # Delete profile
+    await db.shopkeeper_profiles.delete_one({"shopkeeper_id": current_user.id})
+    
+    # Delete all coupons associated with this shopkeeper
+    await db.coupons.delete_many({"shopkeeper_id": current_user.id})
+    
+    # Delete user account
+    await db.users.delete_one({"id": current_user.id})
+    
+    return {"message": "Profile deleted successfully"}
+
 @api_router.get("/shopkeeper/coupons")
 async def get_shopkeeper_coupons(current_user: User = Depends(get_current_user)):
     if current_user.role != 'shopkeeper':
