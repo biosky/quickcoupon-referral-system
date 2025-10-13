@@ -442,7 +442,7 @@ async def get_public_coupon(coupon_code: str):
     return {
         "coupon_code": coupon['coupon_code'],
         "store_name": profile.get('store_name', 'Store'),
-        "cashback_amount": profile.get('cashback_amount', 0),
+        "cashback_offer": profile.get('cashback_offer', 'No offer'),
         "promotional_image": profile.get('promotional_image'),
         "store_description": profile.get('store_description', ''),
         "is_redeemed": coupon['is_redeemed']
@@ -461,7 +461,7 @@ async def get_all_shopkeepers():
             "id": shopkeeper['id'],
             "username": shopkeeper['username'],
             "store_name": profile.get('store_name', shopkeeper['username']) if profile else shopkeeper['username'],
-            "cashback_amount": profile.get('cashback_amount', 0) if profile else 0
+            "cashback_offer": profile.get('cashback_offer', 'No offer') if profile else 'No offer'
         })
     
     return result
