@@ -188,16 +188,17 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
                   </div>
 
                   <div>
-                    <Label htmlFor="cashback_amount">Cashback Amount (₹)</Label>
+                    <Label htmlFor="cashback_offer">Cashback / Offer</Label>
                     <Input
-                      id="cashback_amount"
-                      data-testid="cashback-amount-input"
-                      type="number"
-                      step="0.01"
-                      value={profileForm.cashback_amount}
-                      onChange={(e) => setProfileForm({...profileForm, cashback_amount: e.target.value})}
+                      id="cashback_offer"
+                      data-testid="cashback-offer-input"
+                      type="text"
+                      value={profileForm.cashback_offer}
+                      onChange={(e) => setProfileForm({...profileForm, cashback_offer: e.target.value})}
                       required
+                      placeholder="e.g., ₹100 or 2 Free Coffees or Buy 1 Get 1"
                     />
+                    <p className="text-sm text-gray-500 mt-1">Enter amount (₹100) or offer text (2 Free Coffees)</p>
                   </div>
 
                   <div>
