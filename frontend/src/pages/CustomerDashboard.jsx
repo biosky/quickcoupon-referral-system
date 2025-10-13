@@ -224,14 +224,29 @@ const CustomerDashboard = ({ user, onLogout }) => {
                     </div>
                     
                     {!coupon.is_redeemed && (
-                      <Button 
-                        onClick={() => handleCopyLink(coupon)} 
-                        className="w-full"
-                        data-testid={`copy-link-btn-${coupon.coupon_code}`}
-                      >
-                        <Copy className="w-4 h-4 mr-2" />
-                        Copy Link
-                      </Button>
+                      <div className="space-y-2">
+                        <Button 
+                          onClick={() => handleCopyLink(coupon)} 
+                          className="w-full"
+                          data-testid={`copy-link-btn-${coupon.coupon_code}`}
+                          disabled={coupon.click_count >= 3}
+                        >
+                          <Copy className="w-4 h-4 mr-2" />
+                          {coupon.click_count >= 3 ? `Clicked ${coupon.click_count}/3 ✓` : `Copy Link (${coupon.click_count}/3)`}
+                        </Button>
+                        
+                        {coupon.click_count >= 3 && (
+                          <Button 
+                            onClick={() => handleRedeem(coupon)} 
+                            className="w-full bg-green-600 hover:bg-green-700"
+                            data-testid={`redeem-btn-${coupon.coupon_code}`}
+                            disabled={!redeemEnabled[coupon.coupon_code] || loading}
+                          >
+                            <Gift className="w-4 h-4 mr-2" />
+                            {redeemEnabled[coupon.coupon_code] ? 'Redeem Cashback' : 'Please Wait...'}
+                          </Button>
+                        )}
+                      </div>
                     )}
 
                     {coupon.is_redeemed && (
