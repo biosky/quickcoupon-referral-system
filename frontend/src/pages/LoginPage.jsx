@@ -12,7 +12,14 @@ const API = `${BACKEND_URL}/api`;
 
 const LoginPage = ({ setUser }) => {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
-  const [signupData, setSignupData] = useState({ username: "", password: "", role: "customer" });
+  const [signupData, setSignupData] = useState({ 
+    username: "", 
+    name: "",
+    email: "",
+    phone: "",
+    password: "", 
+    role: "customer" 
+  });
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
