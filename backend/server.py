@@ -78,14 +78,14 @@ class ShopkeeperProfile(BaseModel):
     model_config = ConfigDict(extra="ignore")
     shopkeeper_id: str
     store_name: str
-    cashback_amount: float  # in rupees
+    cashback_offer: str  # flexible text: "100" or "2 free coffees" or "Buy 1 Get 1"
     promotional_image: Optional[str] = None  # base64 encoded
     store_description: Optional[str] = None
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class ShopkeeperProfileUpdate(BaseModel):
     store_name: Optional[str] = None
-    cashback_amount: Optional[float] = None
+    cashback_offer: Optional[str] = None
     promotional_image: Optional[str] = None
     store_description: Optional[str] = None
 
