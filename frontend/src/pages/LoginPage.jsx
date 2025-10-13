@@ -121,11 +121,11 @@ const LoginPage = ({ setUser }) => {
                     <Input
                       id="signup-phone"
                       data-testid="signup-phone-input"
-                      type="tel"
+                      type="text"
                       value={signupData.phone}
                       onChange={(e) => setSignupData({...signupData, phone: e.target.value})}
                       required
-                      placeholder="+91 1234567890"
+                      placeholder="1234567890"
                     />
                   </div>
                   <div>
