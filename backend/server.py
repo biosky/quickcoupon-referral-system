@@ -159,6 +159,8 @@ async def signup(user_create: UserCreate):
     # Create new user
     user = User(
         username=user_create.username,
+        email=user_create.email,
+        phone=user_create.phone,
         role=user_create.role
     )
     
