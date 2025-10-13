@@ -298,14 +298,12 @@ async def get_shopkeeper_analytics(current_user: User = Depends(get_current_user
     
     total_coupons = len(all_coupons)
     redeemed_coupons = sum(1 for c in all_coupons if c['is_redeemed'])
-    total_cashback_given = sum(c['cashback_earned'] for c in all_coupons if c['is_redeemed'])
     pending_coupons = total_coupons - redeemed_coupons
     
     return {
         "total_coupons": total_coupons,
         "redeemed_coupons": redeemed_coupons,
-        "pending_coupons": pending_coupons,
-        "total_cashback_given": total_cashback_given
+        "pending_coupons": pending_coupons
     }
 
 
