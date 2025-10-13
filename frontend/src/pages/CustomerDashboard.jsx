@@ -179,7 +179,7 @@ const CustomerDashboard = ({ user, onLogout }) => {
                 <SelectContent>
                   {shopkeepers.map((shop) => (
                     <SelectItem key={shop.id} value={shop.id}>
-                      {shop.store_name} - ₹{shop.cashback_amount} cashback
+                      {shop.store_name} - {shop.cashback_offer}
                     </SelectItem>
                   ))}
                 </SelectContent>
