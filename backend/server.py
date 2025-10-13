@@ -156,6 +156,11 @@ async def signup(user_create: UserCreate):
     if existing_user:
         raise HTTPException(status_code=400, detail="Username already exists")
     
+    # Check if email already exists
+    existing_email = await db.users.find_one({"email": user_create.email})
+    if existing_email:
+        raise HTTPException(status_code=400, detail="Email already exists")
+    
     # Create new user
     user = User(
         username=user_create.username,
