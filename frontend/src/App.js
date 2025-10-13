@@ -86,7 +86,7 @@ function App() {
               : <Navigate to="/login" />
           } />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
