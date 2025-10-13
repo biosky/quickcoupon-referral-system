@@ -404,16 +404,16 @@ async def redeem_coupon(
     if coupon['click_count'] < 3:
         raise HTTPException(status_code=400, detail="You need to click Copy Link 3 times before redeeming")
     
-    # Get shopkeeper profile for cashback amount
+    # Get shopkeeper profile for cashback offer
     profile = await db.shopkeeper_profiles.find_one({"shopkeeper_id": coupon['shopkeeper_id']})
-    cashback_amount = profile.get('cashback_amount', 0) if profile else 0
+    cashback_offer = profile.get('cashback_offer', 'No offer') if profile else 'No offer'
     
     # Redeem coupon
     await db.coupons.update_one(
         {"coupon_code": click_req.coupon_code},
         {"$set": {
             "is_redeemed": True,
-            "cashback_earned": cashback_amount,
+            "cashback_earned": cashback_offer,
             "redeemed_at": datetime.now(timezone.utc).isoformat()
         }}
     )
@@ -421,7 +421,7 @@ async def redeem_coupon(
     return {
         "message": "Coupon redeemed successfully",
         "is_redeemed": True,
-        "cashback_earned": cashback_amount
+        "cashback_earned": cashback_offer
     }
 
 
