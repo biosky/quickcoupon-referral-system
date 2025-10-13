@@ -115,6 +115,23 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
     setLoading(false);
   };
 
+  const handleDeleteProfile = async () => {
+    if (!window.confirm("Are you sure you want to delete your profile? This action cannot be undone and will remove all your coupons.")) {
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      await axios.delete(`${API}/shopkeeper/profile`);
+      toast.success("Profile deleted successfully");
+      localStorage.removeItem('token');
+      onLogout();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Failed to delete profile");
+    }
+    setLoading(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
