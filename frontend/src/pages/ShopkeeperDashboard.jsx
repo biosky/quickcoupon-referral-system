@@ -17,7 +17,7 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
   const [profile, setProfile] = useState(null);
   const [profileForm, setProfileForm] = useState({
     store_name: "",
-    cashback_amount: "",
+    cashback_offer: "",
     store_description: "",
     promotional_image: null
   });
