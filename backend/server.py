@@ -349,7 +349,7 @@ async def get_customer_coupons(current_user: User = Depends(get_current_user)):
         profile = await db.shopkeeper_profiles.find_one({"shopkeeper_id": coupon['shopkeeper_id']}, {"_id": 0})
         if profile:
             coupon['store_name'] = profile.get('store_name', 'Unknown Store')
-            coupon['cashback_amount'] = profile.get('cashback_amount', 0)
+            coupon['cashback_offer'] = profile.get('cashback_offer', 'No offer')
     
     return coupons
 
