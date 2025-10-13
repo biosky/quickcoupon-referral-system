@@ -32,6 +32,11 @@ ALGORITHM = "HS256"
 # Create the main app without a prefix
 app = FastAPI()
 
+# Add root health check endpoint
+@app.get("/")
+async def root():
+    return {"status": "healthy", "message": "QuickCoupon API is running", "version": "1.0.0"}
+
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
