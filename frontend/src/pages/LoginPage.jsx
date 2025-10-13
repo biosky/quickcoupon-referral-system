@@ -105,17 +105,6 @@ const LoginPage = ({ setUser }) => {
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div>
-                    <Label htmlFor="signup-name">Full Name</Label>
-                    <Input
-                      id="signup-name"
-                      data-testid="signup-name-input"
-                      value={signupData.name}
-                      onChange={(e) => setSignupData({...signupData, name: e.target.value})}
-                      required
-                      placeholder="John Doe"
-                    />
-                  </div>
-                  <div>
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
                       id="signup-email"
