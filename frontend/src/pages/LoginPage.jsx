@@ -14,7 +14,6 @@ const LoginPage = ({ setUser }) => {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
   const [signupData, setSignupData] = useState({ 
     username: "", 
-    name: "",
     email: "",
     phone: "",
     password: "", 
