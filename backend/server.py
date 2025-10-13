@@ -52,6 +52,9 @@ api_router = APIRouter(prefix="/api")
 
 class UserBase(BaseModel):
     username: str
+    name: str
+    email: EmailStr
+    phone: str
     role: str  # 'customer' or 'shopkeeper'
 
 class UserCreate(UserBase):
