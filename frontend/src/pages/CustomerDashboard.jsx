@@ -18,6 +18,7 @@ const CustomerDashboard = ({ user, onLogout }) => {
   const [loading, setLoading] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
   const [redeemedCoupon, setRedeemedCoupon] = useState(null);
+  const [redeemEnabled, setRedeemEnabled] = useState({});
 
   useEffect(() => {
     fetchShopkeepers();
