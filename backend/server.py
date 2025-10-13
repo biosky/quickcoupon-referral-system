@@ -206,7 +206,7 @@ async def get_me(current_user: User = Depends(get_current_user)):
 @api_router.post("/shopkeeper/profile")
 async def update_shopkeeper_profile(
     store_name: str = Form(...),
-    cashback_amount: float = Form(...),
+    cashback_offer: str = Form(...),
     store_description: str = Form(None),
     promotional_image: Optional[UploadFile] = File(None),
     current_user: User = Depends(get_current_user)
@@ -227,7 +227,7 @@ async def update_shopkeeper_profile(
     profile_data = {
         "shopkeeper_id": current_user.id,
         "store_name": store_name,
-        "cashback_amount": cashback_amount,
+        "cashback_offer": cashback_offer,
         "store_description": store_description,
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
