@@ -66,7 +66,7 @@ const CustomerDashboard = ({ user, onLogout }) => {
   };
 
   const handleCopyLink = async (coupon) => {
-    const link = `${window.location.origin}/coupon/${coupon.coupon_code}`;
+    const link = `${window.location.origin}/#/coupon/${coupon.coupon_code}`;
     
     try {
       await navigator.clipboard.writeText(link);
