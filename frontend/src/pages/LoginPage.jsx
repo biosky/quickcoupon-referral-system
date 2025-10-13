@@ -106,6 +106,41 @@ const LoginPage = ({ setUser }) => {
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div>
+                    <Label htmlFor="signup-name">Full Name</Label>
+                    <Input
+                      id="signup-name"
+                      data-testid="signup-name-input"
+                      value={signupData.name}
+                      onChange={(e) => setSignupData({...signupData, name: e.target.value})}
+                      required
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-email">Email</Label>
+                    <Input
+                      id="signup-email"
+                      data-testid="signup-email-input"
+                      type="email"
+                      value={signupData.email}
+                      onChange={(e) => setSignupData({...signupData, email: e.target.value})}
+                      required
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="signup-phone">Phone Number</Label>
+                    <Input
+                      id="signup-phone"
+                      data-testid="signup-phone-input"
+                      type="tel"
+                      value={signupData.phone}
+                      onChange={(e) => setSignupData({...signupData, phone: e.target.value})}
+                      required
+                      placeholder="+91 1234567890"
+                    />
+                  </div>
+                  <div>
                     <Label htmlFor="signup-username">Username</Label>
                     <Input
                       id="signup-username"
@@ -113,6 +148,7 @@ const LoginPage = ({ setUser }) => {
                       value={signupData.username}
                       onChange={(e) => setSignupData({...signupData, username: e.target.value})}
                       required
+                      placeholder="johndoe"
                     />
                   </div>
                   <div>
@@ -124,6 +160,7 @@ const LoginPage = ({ setUser }) => {
                       value={signupData.password}
                       onChange={(e) => setSignupData({...signupData, password: e.target.value})}
                       required
+                      placeholder="••••••••"
                     />
                   </div>
                   <div>
