@@ -232,6 +232,20 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
                   <Button type="submit" disabled={loading} className="w-full" data-testid="update-profile-btn">
                     {loading ? "Updating..." : "Update Profile"}
                   </Button>
+                  
+                  <div className="mt-6 pt-6 border-t">
+                    <h3 className="text-lg font-semibold text-red-600 mb-2">Danger Zone</h3>
+                    <p className="text-sm text-gray-600 mb-3">Once you delete your profile, there is no going back. This will remove your store from the website and delete all associated coupons.</p>
+                    <Button 
+                      type="button"
+                      onClick={handleDeleteProfile} 
+                      disabled={loading}
+                      className="w-full bg-red-600 hover:bg-red-700"
+                      data-testid="delete-profile-btn"
+                    >
+                      Delete Profile
+                    </Button>
+                  </div>
                 </form>
               </CardContent>
             </Card>
