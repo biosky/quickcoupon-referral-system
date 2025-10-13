@@ -45,7 +45,7 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
         setProfile(response.data);
         setProfileForm({
           store_name: response.data.store_name,
-          cashback_amount: response.data.cashback_amount,
+          cashback_offer: response.data.cashback_offer,
           store_description: response.data.store_description || "",
           promotional_image: null
         });
