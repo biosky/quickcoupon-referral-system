@@ -348,35 +348,61 @@ async def track_click(
         raise HTTPException(status_code=404, detail="Coupon not found")
     
     if coupon['is_redeemed']:
-        return {"message": "Coupon already redeemed", "already_redeemed": True}
+        return {"message": "Coupon already redeemed", "already_redeemed": True, "click_count": coupon['click_count']}
     
-    # Increment click count
+    # Increment click count only (no auto-redemption)
     new_click_count = coupon['click_count'] + 1
-    
-    update_data = {
-        "click_count": new_click_count
-    }
-    
-    # Check if reached 3 clicks
-    if new_click_count >= 3:
-        # Get shopkeeper profile for cashback amount
-        profile = await db.shopkeeper_profiles.find_one({"shopkeeper_id": coupon['shopkeeper_id']})
-        cashback_amount = profile.get('cashback_amount', 0) if profile else 0
-        
-        update_data["is_redeemed"] = True
-        update_data["cashback_earned"] = cashback_amount
-        update_data["redeemed_at"] = datetime.now(timezone.utc).isoformat()
     
     await db.coupons.update_one(
         {"coupon_code": click_req.coupon_code},
-        {"$set": update_data}
+        {"$set": {"click_count": new_click_count}}
     )
     
     return {
         "message": "Click tracked successfully",
         "click_count": new_click_count,
-        "is_redeemed": new_click_count >= 3,
-        "cashback_earned": update_data.get('cashback_earned', 0)
+        "can_redeem": new_click_count >= 3,
+        "is_redeemed": False
+    }
+
+@api_router.post("/customer/redeem")
+async def redeem_coupon(
+    click_req: ClickTrackRequest,
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != 'customer':
+        raise HTTPException(status_code=403, detail="Only customers can redeem coupons")
+    
+    # Find coupon
+    coupon = await db.coupons.find_one({"coupon_code": click_req.coupon_code, "customer_id": current_user.id})
+    if not coupon:
+        raise HTTPException(status_code=404, detail="Coupon not found")
+    
+    if coupon['is_redeemed']:
+        return {"message": "Coupon already redeemed", "already_redeemed": True}
+    
+    # Check if customer has clicked 3 times
+    if coupon['click_count'] < 3:
+        raise HTTPException(status_code=400, detail="You need to click Copy Link 3 times before redeeming")
+    
+    # Get shopkeeper profile for cashback amount
+    profile = await db.shopkeeper_profiles.find_one({"shopkeeper_id": coupon['shopkeeper_id']})
+    cashback_amount = profile.get('cashback_amount', 0) if profile else 0
+    
+    # Redeem coupon
+    await db.coupons.update_one(
+        {"coupon_code": click_req.coupon_code},
+        {"$set": {
+            "is_redeemed": True,
+            "cashback_earned": cashback_amount,
+            "redeemed_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {
+        "message": "Coupon redeemed successfully",
+        "is_redeemed": True,
+        "cashback_earned": cashback_amount
     }
 
 
