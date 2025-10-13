@@ -58,7 +58,7 @@ function App() {
   return (
     <div className="App">
       <Toaster position="top-center" richColors />
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/login" element={
             user ? 
