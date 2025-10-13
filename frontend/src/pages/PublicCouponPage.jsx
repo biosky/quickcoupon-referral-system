@@ -89,11 +89,11 @@ const PublicCouponPage = () => {
               )}
             </div>
 
-            {/* Cashback Amount */}
+            {/* Cashback/Offer */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-100 border-2 border-green-500 rounded-xl p-8 text-center">
-              <p className="text-gray-600 mb-2">Get Cashback</p>
-              <p className="text-5xl md:text-6xl font-bold text-green-600" data-testid="cashback-amount">
-                ₹{couponData.cashback_amount}
+              <p className="text-gray-600 mb-2">Exclusive Offer</p>
+              <p className="text-4xl md:text-5xl font-bold text-green-600" data-testid="cashback-offer">
+                {couponData.cashback_offer}
               </p>
             </div>
 
