@@ -213,7 +213,7 @@ async def get_me(current_user: User = Depends(get_current_user)):
 async def update_shopkeeper_profile(
     store_name: str = Form(...),
     cashback_offer: str = Form(...),
-    store_description: str = Form(None),
+    store_description: Optional[str] = Form(""),
     promotional_image: Optional[UploadFile] = File(None),
     current_user: User = Depends(get_current_user)
 ):
@@ -234,7 +234,7 @@ async def update_shopkeeper_profile(
         "shopkeeper_id": current_user.id,
         "store_name": store_name,
         "cashback_offer": cashback_offer,
-        "store_description": store_description,
+        "store_description": store_description if store_description else "",
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
