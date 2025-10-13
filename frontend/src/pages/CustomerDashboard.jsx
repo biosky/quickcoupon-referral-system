@@ -84,13 +84,18 @@ const CustomerDashboard = ({ user, onLogout }) => {
 
       toast.success(`Link copied! (Click ${response.data.click_count}/3)`);
 
-      // Check if redeemed
-      if (response.data.is_redeemed) {
-        setRedeemedCoupon({
-          ...coupon,
-          cashback_earned: response.data.cashback_earned
-        });
-        setShowCongrats(true);
+      // Check if can redeem (reached 3 clicks)
+      if (response.data.can_redeem && response.data.click_count >= 3) {
+        toast.info("Processing... Please wait");
+        
+        // Wait 2.5 seconds before enabling redeem button
+        setTimeout(() => {
+          setRedeemEnabled(prev => ({
+            ...prev,
+            [coupon.coupon_code]: true
+          }));
+          toast.success("You can now redeem your cashback!");
+        }, 2500);
       }
 
       // Refresh coupons
@@ -98,6 +103,35 @@ const CustomerDashboard = ({ user, onLogout }) => {
     } catch (error) {
       toast.error("Failed to copy link");
     }
+  };
+
+  const handleRedeem = async (coupon) => {
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/customer/redeem`, {
+        coupon_code: coupon.coupon_code
+      });
+
+      if (response.data.is_redeemed) {
+        setRedeemedCoupon({
+          ...coupon,
+          cashback_earned: response.data.cashback_earned
+        });
+        setShowCongrats(true);
+        
+        // Disable the redeem button for this coupon
+        setRedeemEnabled(prev => ({
+          ...prev,
+          [coupon.coupon_code]: false
+        }));
+        
+        // Refresh coupons
+        fetchCoupons();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.detail || "Failed to redeem coupon");
+    }
+    setLoading(false);
   };
 
   return (
