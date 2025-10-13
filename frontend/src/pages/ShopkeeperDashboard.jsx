@@ -298,7 +298,7 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
 
           {/* Analytics Tab */}
           <TabsContent value="analytics">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-3">
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium text-gray-600">Total Coupons</CardTitle>
@@ -323,15 +323,6 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold text-orange-600" data-testid="analytics-pending">{analytics?.pending_coupons || 0}</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium text-gray-600">Total Cashback Given</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold text-purple-600" data-testid="analytics-cashback">₹{analytics?.total_cashback_given || 0}</p>
                 </CardContent>
               </Card>
             </div>
