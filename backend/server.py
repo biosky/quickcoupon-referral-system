@@ -52,7 +52,7 @@ api_router = APIRouter(prefix="/api")
 
 class UserBase(BaseModel):
     username: str
-    email: EmailStr
+    email: str
     phone: str
     role: str  # 'customer' or 'shopkeeper'
 
