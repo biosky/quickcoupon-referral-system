@@ -93,7 +93,7 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
     try {
       const formData = new FormData();
       formData.append('store_name', profileForm.store_name);
-      formData.append('cashback_amount', profileForm.cashback_amount);
+      formData.append('cashback_offer', profileForm.cashback_offer);
       if (profileForm.store_description) {
         formData.append('store_description', profileForm.store_description);
       }
