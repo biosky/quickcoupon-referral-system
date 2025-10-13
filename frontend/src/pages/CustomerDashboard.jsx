@@ -208,7 +208,7 @@ const CustomerDashboard = ({ user, onLogout }) => {
                       <div>
                         <h3 className="font-semibold text-lg">{coupon.store_name || 'Store'}</h3>
                         <p className="text-sm text-gray-600">Code: {coupon.coupon_code}</p>
-                        <p className="text-sm font-medium text-green-600 mt-1">₹{coupon.cashback_amount} Cashback</p>
+                        <p className="text-sm font-medium text-green-600 mt-1">{coupon.cashback_offer}</p>
                       </div>
                       {coupon.is_redeemed ? (
                         <Badge className="bg-green-500">
