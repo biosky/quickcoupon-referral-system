@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: quickcoupon-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn server:app --host 0.0.0.0 --port $PORT
+    
+  - type: static-site
+    name: quickcoupon-frontend
+    env: node
+    buildCommand: cd frontend && npm install --legacy-peer-deps && npm run build
+    staticPublishPath: ./frontend/build
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
