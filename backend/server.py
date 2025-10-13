@@ -97,7 +97,7 @@ class Coupon(BaseModel):
     shopkeeper_id: str
     click_count: int = 0
     is_redeemed: bool = False
-    cashback_earned: float = 0.0
+    cashback_earned: str = ""  # flexible text for offer
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     redeemed_at: Optional[datetime] = None
 
