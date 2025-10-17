@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,11 @@ import { toast } from "sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
+
+// Adsterra Ad Configuration
+const ADS_ENABLED = process.env.REACT_APP_ADS_ENABLED === 'true';
+const AD_SCRIPT = process.env.REACT_APP_ADSTERRA_AD_SCRIPT;
+const AD_CONTAINER = process.env.REACT_APP_ADSTERRA_AD_CONTAINER;
 
 const LoginPage = ({ setUser }) => {
   const [loginData, setLoginData] = useState({ username: "", password: "" });
