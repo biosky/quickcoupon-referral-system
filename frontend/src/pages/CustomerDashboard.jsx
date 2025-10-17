@@ -8,14 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { LogOut, Copy, Gift, CheckCircle, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import AdsterraAd from "@/components/AdsterraAd";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 // Adsterra Ad Configuration
 const ADS_ENABLED = process.env.REACT_APP_ADS_ENABLED === 'true';
-const AD_SCRIPT = process.env.REACT_APP_ADSTERRA_AD_SCRIPT;
-const AD_CONTAINER = process.env.REACT_APP_ADSTERRA_AD_CONTAINER;
+const AD_KEY = process.env.REACT_APP_ADSTERRA_AD_KEY;
 
 const CustomerDashboard = ({ user, onLogout }) => {
   const location = useLocation();
