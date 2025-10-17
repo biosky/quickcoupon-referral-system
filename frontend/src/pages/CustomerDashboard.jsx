@@ -229,11 +229,21 @@ const CustomerDashboard = ({ user, onLogout }) => {
         </Card>
 
         {/* Subtle Ad - Between Sections */}
-        {ADS_ENABLED && AD_CONTAINER && (
+        {ADS_ENABLED && AD_KEY && (
           <div className="my-6 flex justify-center">
             <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 max-w-2xl w-full">
               <div className="text-xs text-gray-400 mb-2 text-center">Advertisement</div>
-              <div id={`${AD_CONTAINER}-between`} className="flex justify-center"></div>
+              <AdsterraAd
+                atOptions={{
+                  key: AD_KEY,
+                  format: 'iframe',
+                  height: 250,
+                  width: 300,
+                  params: {}
+                }}
+                scriptSrc={`https://pl27869165.effectivegatecpm.com/${AD_KEY}/invoke.js`}
+                containerId={`adsterra-between-${AD_KEY}`}
+              />
             </div>
           </div>
         )}
