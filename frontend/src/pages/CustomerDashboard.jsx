@@ -172,10 +172,20 @@ const CustomerDashboard = ({ user, onLogout }) => {
 
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
         {/* Top Banner Ad - Small and Non-intrusive */}
-        {ADS_ENABLED && AD_CONTAINER && (
+        {ADS_ENABLED && AD_KEY && (
           <div className="bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
             <div className="text-xs text-gray-400 text-center mb-2">Sponsored</div>
-            <div id={AD_CONTAINER} className="flex justify-center"></div>
+            <AdsterraAd
+              atOptions={{
+                key: AD_KEY,
+                format: 'iframe',
+                height: 90,
+                width: 728,
+                params: {}
+              }}
+              scriptSrc={`https://pl27869165.effectivegatecpm.com/${AD_KEY}/invoke.js`}
+              containerId={`adsterra-top-${AD_KEY}`}
+            />
           </div>
         )}
 
