@@ -18,6 +18,7 @@ const AD_SCRIPT = process.env.REACT_APP_ADSTERRA_AD_SCRIPT;
 const AD_CONTAINER = process.env.REACT_APP_ADSTERRA_AD_CONTAINER;
 
 const CustomerDashboard = ({ user, onLogout }) => {
+  const location = useLocation();
   const [shopkeepers, setShopkeepers] = useState([]);
   const [selectedShopkeeper, setSelectedShopkeeper] = useState("");
   const [coupons, setCoupons] = useState([]);
@@ -29,10 +30,19 @@ const CustomerDashboard = ({ user, onLogout }) => {
   useEffect(() => {
     fetchShopkeepers();
     fetchCoupons();
+    
+    // Check if shopkeeper_id is in URL params (from QR code scan)
+    const params = new URLSearchParams(location.search);
+    const shopkeeperId = params.get('shopkeeper_id');
+    if (shopkeeperId) {
+      setSelectedShopkeeper(shopkeeperId);
+      toast.success("Shopkeeper ID loaded from QR code!");
+    }
+    
     // Set up polling for real-time updates
     const interval = setInterval(fetchCoupons, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [location]);
 
   // Load Adsterra ad script
   useEffect(() => {
