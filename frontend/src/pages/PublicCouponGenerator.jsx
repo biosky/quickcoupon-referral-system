@@ -134,6 +134,9 @@ const PublicCouponGenerator = () => {
 
       setShareClicked(true);
       
+      // Persist share state in localStorage (for Android compatibility)
+      localStorage.setItem(`share_${coupon.coupon_code}`, 'true');
+      
       // Create WhatsApp message
       const message = `🎉 Hey! Check out this amazing offer from ${shopInfo?.store_name || 'our store'}!
 
@@ -146,8 +149,35 @@ Generated via QuickCoupon`;
       // Use WhatsApp URL that works on both mobile and desktop
       const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
       
-      // Always open in new tab/window to avoid navigation issues
-      const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      // Detect if mobile for better handling
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        // On mobile, enable redeem immediately with a delay as fallback
+        setTimeout(() => {
+          setRedeemEnabled(true);
+          toast.info("You can now redeem your cashback!");
+        }, 3000);
+        
+        // Try to open WhatsApp
+        window.location.href = whatsappUrl;
+      } else {
+        // Desktop - open in new tab
+        const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        
+        if (!whatsappWindow) {
+          toast.warning("Please allow popups and try again");
+          window.location.href = whatsappUrl;
+        } else {
+          toast.info("WhatsApp opened! Come back here after sharing to redeem.");
+        }
+      }
+      
+    } catch (error) {
+      console.error("WhatsApp share error:", error);
+      toast.error("Failed to open WhatsApp. Link is copied - you can paste it manually!");
+    }
+  };
       
       if (!whatsappWindow) {
         // If popup blocked, try direct link
