@@ -6,6 +6,7 @@ import LoginPage from "@/pages/LoginPage";
 import CustomerDashboard from "@/pages/CustomerDashboard";
 import ShopkeeperDashboard from "@/pages/ShopkeeperDashboard";
 import PublicCouponPage from "@/pages/PublicCouponPage";
+import PublicCouponGenerator from "@/pages/PublicCouponGenerator";
 import { Toaster } from "@/components/ui/sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
