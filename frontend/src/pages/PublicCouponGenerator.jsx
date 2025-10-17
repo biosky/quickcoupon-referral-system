@@ -93,16 +93,30 @@ const PublicCouponGenerator = () => {
       setShareClicked(true);
       
       // Create WhatsApp message
-      const message = `🎉 Hey! Check out this amazing offer from ${shopInfo?.store_name || 'our store'}!\n\n💰 ${shopInfo?.cashback_offer || 'Special offer'}\n\n🔗 Use my coupon: ${link}\n\nGenerated via QuickCoupon`;
-      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      const message = `🎉 Hey! Check out this amazing offer from ${shopInfo?.store_name || 'our store'}!
+
+💰 ${shopInfo?.cashback_offer || 'Special offer'}
+
+🔗 Use my coupon: ${link}
+
+Generated via QuickCoupon`;
       
-      // Open WhatsApp
-      window.open(whatsappUrl, '_blank');
+      // Use mobile-friendly WhatsApp URL (works on both mobile and desktop)
+      const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
       
-      toast.info("Share with your friends on WhatsApp!");
+      // Open WhatsApp - use location.href on mobile for better compatibility
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        window.location.href = whatsappUrl;
+      } else {
+        window.open(whatsappUrl, '_blank');
+      }
+      
+      toast.info("Opening WhatsApp...");
       
     } catch (error) {
-      toast.error("Failed to process share");
+      console.error("WhatsApp share error:", error);
+      toast.error("Failed to open WhatsApp");
     }
   };
 
