@@ -249,9 +249,15 @@ async def update_shopkeeper_profile(
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
+    # Handle promotional image
     if image_base64:
+        # New image uploaded
         profile_data["promotional_image"] = image_base64
-    elif not existing_profile:
+    elif existing_profile and "promotional_image" in existing_profile:
+        # Keep existing image if no new image uploaded
+        profile_data["promotional_image"] = existing_profile["promotional_image"]
+    else:
+        # No image at all
         profile_data["promotional_image"] = None
     
     if existing_profile:
