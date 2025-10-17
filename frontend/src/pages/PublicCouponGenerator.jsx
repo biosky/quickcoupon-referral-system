@@ -21,6 +21,17 @@ const PublicCouponGenerator = () => {
   const [shopInfo, setShopInfo] = useState(null);
   const [shareClicked, setShareClicked] = useState(false);
 
+  // Check if share was previously clicked (from localStorage)
+  useEffect(() => {
+    if (coupon) {
+      const storedShare = localStorage.getItem(`share_${coupon.coupon_code}`);
+      if (storedShare === 'true') {
+        setShareClicked(true);
+        setRedeemEnabled(true);
+      }
+    }
+  }, [coupon]);
+
   useEffect(() => {
     // Get shopkeeper_id from URL and auto-generate coupon
     const params = new URLSearchParams(location.search);
@@ -35,7 +46,7 @@ const PublicCouponGenerator = () => {
     }
   }, [location]);
 
-  // Page Visibility API - detect when customer returns from WhatsApp
+  // Multiple detection methods for Android/iOS compatibility
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden && shareClicked && !redeemEnabled) {
@@ -45,10 +56,33 @@ const PublicCouponGenerator = () => {
       }
     };
 
+    const handleFocus = () => {
+      // Fallback for Android - focus event
+      if (shareClicked && !redeemEnabled) {
+        console.log('Window focus detected - enabling redeem');
+        setRedeemEnabled(true);
+      }
+    };
+
+    const handleResume = () => {
+      // Android-specific resume event
+      if (shareClicked && !redeemEnabled) {
+        console.log('Resume detected - enabling redeem');
+        setRedeemEnabled(true);
+      }
+    };
+
+    // Add all event listeners for maximum compatibility
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('pageshow', handleFocus);
+    document.addEventListener('resume', handleResume);
     
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('pageshow', handleFocus);
+      document.removeEventListener('resume', handleResume);
     };
   }, [shareClicked, redeemEnabled]);
 
