@@ -80,11 +80,16 @@ const PublicCouponGenerator = () => {
 
     const link = `${window.location.origin}/#/coupon/${coupon.coupon_code}`;
     
+    // Try to copy link to clipboard (optional)
     try {
-      // Copy link to clipboard first
       await navigator.clipboard.writeText(link);
       toast.success("Link copied to clipboard!");
-      
+    } catch (clipboardError) {
+      console.warn("Clipboard access denied:", clipboardError);
+      // Continue without clipboard - not a critical failure
+    }
+    
+    try {
       // Track share in backend
       await axios.post(`${API}/public/track-share`, {
         coupon_code: coupon.coupon_code
