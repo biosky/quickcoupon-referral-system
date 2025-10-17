@@ -497,7 +497,8 @@ async def get_shopkeeper_info(shopkeeper_id: str):
     return {
         "store_name": profile.get('store_name', 'Store'),
         "cashback_offer": profile.get('cashback_offer', 'No offer'),
-        "store_description": profile.get('store_description', '')
+        "store_description": profile.get('store_description', ''),
+        "promotional_image": profile.get('promotional_image', None)
     }
 
 @api_router.post("/public/generate-coupon")
