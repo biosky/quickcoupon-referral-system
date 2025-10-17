@@ -160,6 +160,17 @@ Generated via QuickCoupon`;
         {shopInfo && (
           <Card className="shadow-lg">
             <CardContent className="p-6 text-center">
+              {/* Promotional Image */}
+              {shopInfo.promotional_image && (
+                <div className="mb-4 flex justify-center">
+                  <img 
+                    src={shopInfo.promotional_image} 
+                    alt={shopInfo.store_name}
+                    className="max-w-full h-auto rounded-lg shadow-md"
+                    style={{ maxHeight: '300px' }}
+                  />
+                </div>
+              )}
               <h2 className="text-2xl font-bold mb-2">{shopInfo.store_name}</h2>
               <p className="text-green-600 font-semibold text-lg mb-2">{shopInfo.cashback_offer}</p>
               {shopInfo.store_description && (
