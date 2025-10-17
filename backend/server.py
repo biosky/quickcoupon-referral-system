@@ -539,20 +539,19 @@ async def track_whatsapp_share(data: dict):
 async def redeem_coupon_public(data: dict):
     """Redeem coupon without login"""
     coupon_code = data.get('coupon_code')
-    customer_phone = data.get('customer_phone')
     
-    if not coupon_code or not customer_phone:
-        raise HTTPException(status_code=400, detail="Coupon code and phone number required")
+    if not coupon_code:
+        raise HTTPException(status_code=400, detail="Coupon code required")
     
-    coupon = await db.coupons.find_one({"coupon_code": coupon_code, "customer_phone": customer_phone})
+    coupon = await db.coupons.find_one({"coupon_code": coupon_code})
     if not coupon:
         raise HTTPException(status_code=404, detail="Coupon not found")
     
     if coupon['is_redeemed']:
         return {"message": "Coupon already redeemed", "already_redeemed": True}
     
-    if coupon['click_count'] < 3:
-        raise HTTPException(status_code=400, detail="You need to click Copy Link 3 times before redeeming")
+    if not coupon.get('share_clicked', False):
+        raise HTTPException(status_code=400, detail="You need to share via WhatsApp before redeeming")
     
     # Get shopkeeper profile for cashback offer
     profile = await db.shopkeeper_profiles.find_one({"shopkeeper_id": coupon['shopkeeper_id']})
