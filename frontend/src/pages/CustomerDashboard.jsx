@@ -48,9 +48,19 @@ const CustomerDashboard = ({ user, onLogout }) => {
   useEffect(() => {
     if (ADS_ENABLED && AD_SCRIPT) {
       const script = document.createElement('script');
-      script.src = AD_SCRIPT;
+      // Add protocol if missing
+      script.src = AD_SCRIPT.startsWith('//') ? `https:${AD_SCRIPT}` : AD_SCRIPT;
       script.async = true;
       script.setAttribute('data-cfasync', 'false');
+      
+      script.onload = () => {
+        console.log('Adsterra ad script loaded successfully');
+      };
+      
+      script.onerror = () => {
+        console.error('Failed to load Adsterra ad script');
+      };
+      
       document.body.appendChild(script);
 
       return () => {
@@ -58,6 +68,8 @@ const CustomerDashboard = ({ user, onLogout }) => {
           document.body.removeChild(script);
         }
       };
+    } else {
+      console.log('Ads not enabled or script not configured');
     }
   }, []);
 
