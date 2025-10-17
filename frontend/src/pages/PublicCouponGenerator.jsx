@@ -147,50 +147,21 @@ const PublicCouponGenerator = () => {
           <Card className="shadow-lg">
             <CardContent className="p-6 text-center">
               <h2 className="text-2xl font-bold mb-2">{shopInfo.store_name}</h2>
-              <p className="text-green-600 font-semibold text-lg">{shopInfo.cashback_offer}</p>
+              <p className="text-green-600 font-semibold text-lg mb-2">{shopInfo.cashback_offer}</p>
+              {shopInfo.store_description && (
+                <p className="text-gray-600 text-sm">{shopInfo.store_description}</p>
+              )}
             </CardContent>
           </Card>
         )}
 
-        {!coupon ? (
-          /* Generate Coupon Form */
+        {loading ? (
           <Card className="shadow-lg">
-            <CardHeader>
-              <CardTitle>Get Your Coupon</CardTitle>
-              <CardDescription>Enter your details to generate your cashback coupon</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleGenerateCoupon} className="space-y-4">
-                <div>
-                  <Label htmlFor="customer-name">Your Name (Optional)</Label>
-                  <Input
-                    id="customer-name"
-                    type="text"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    placeholder="John Doe"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="customer-phone">Phone Number *</Label>
-                  <Input
-                    id="customer-phone"
-                    type="text"
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    placeholder="9876543210"
-                    required
-                  />
-                </div>
-
-                <Button type="submit" disabled={loading} className="w-full">
-                  {loading ? "Generating..." : "Generate Coupon"}
-                </Button>
-              </form>
+            <CardContent className="p-8 text-center">
+              <p className="text-gray-600">Generating your coupon...</p>
             </CardContent>
           </Card>
-        ) : (
+        ) : coupon ? (
           /* Coupon Display */
           <Card className="shadow-lg">
             <CardHeader>
@@ -198,7 +169,7 @@ const PublicCouponGenerator = () => {
                 <Gift className="w-6 h-6" />
                 Your Coupon
               </CardTitle>
-              <CardDescription>Share 3 times to earn cashback</CardDescription>
+              <CardDescription>Share on WhatsApp to unlock your cashback!</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="bg-gradient-to-br from-green-50 to-emerald-100 border-2 border-green-500 rounded-xl p-6 text-center">
@@ -218,25 +189,40 @@ const PublicCouponGenerator = () => {
               </div>
 
               {!coupon.is_redeemed && (
-                <div className="space-y-2">
-                  <Button 
-                    onClick={handleCopyLink}
-                    className="w-full"
-                    disabled={clickCount >= 3}
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    {clickCount >= 3 ? `Clicked ${clickCount}/3 ✓` : `Copy Link (${clickCount}/3)`}
-                  </Button>
-                  
-                  {clickCount >= 3 && (
+                <div className="space-y-3">
+                  {!shareClicked ? (
                     <Button 
-                      onClick={handleRedeem}
-                      className="w-full bg-green-600 hover:bg-green-700"
-                      disabled={!redeemEnabled || loading}
+                      onClick={handleWhatsAppShare}
+                      className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
                     >
-                      <Gift className="w-4 h-4 mr-2" />
-                      {redeemEnabled ? 'Redeem Cashback' : 'Please Wait...'}
+                      <Share2 className="w-5 h-5 mr-2" />
+                      Share via WhatsApp
                     </Button>
+                  ) : (
+                    <>
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+                        <p className="text-green-700 font-semibold text-sm">
+                          ✓ Shared on WhatsApp
+                        </p>
+                      </div>
+                      
+                      {redeemEnabled ? (
+                        <Button 
+                          onClick={handleRedeem}
+                          className="w-full bg-purple-600 hover:bg-purple-700 text-lg py-6"
+                          disabled={loading}
+                        >
+                          <Gift className="w-5 h-5 mr-2" />
+                          Redeem Cashback Now!
+                        </Button>
+                      ) : (
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+                          <p className="text-blue-700 text-sm">
+                            Come back to this page after sharing to redeem your cashback!
+                          </p>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -250,7 +236,7 @@ const PublicCouponGenerator = () => {
               )}
             </CardContent>
           </Card>
-        )}
+        ) : null}
 
         {/* How It Works */}
         <Card className="shadow-lg bg-white/10 backdrop-blur-md border-white/20">
