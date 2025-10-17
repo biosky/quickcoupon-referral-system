@@ -18,16 +18,27 @@ import base64
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection with SSL support
+# MongoDB connection with conditional SSL support
 import certifi
 
 mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(
-    mongo_url,
-    tlsCAFile=certifi.where(),
-    serverSelectionTimeoutMS=5000,
-    connectTimeoutMS=10000
-)
+
+# Only use SSL for remote MongoDB connections
+if 'localhost' in mongo_url or '127.0.0.1' in mongo_url:
+    # Local MongoDB without SSL
+    client = AsyncIOMotorClient(
+        mongo_url,
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=10000
+    )
+else:
+    # Remote MongoDB with SSL
+    client = AsyncIOMotorClient(
+        mongo_url,
+        tlsCAFile=certifi.where(),
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=10000
+    )
 db = client[os.environ['DB_NAME']]
 
 # Security
