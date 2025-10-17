@@ -337,15 +337,6 @@ const CustomerDashboard = ({ user, onLogout }) => {
           </Button>
         </DialogContent>
       </Dialog>
-
-      {/* Adsterra Ad */}
-      {ADS_ENABLED && AD_CONTAINER && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-2 z-50">
-          <div className="max-w-6xl mx-auto flex justify-center">
-            <div id={AD_CONTAINER}></div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
