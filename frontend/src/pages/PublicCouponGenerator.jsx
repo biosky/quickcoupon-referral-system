@@ -178,20 +178,6 @@ Generated via QuickCoupon`;
       toast.error("Failed to open WhatsApp. Link is copied - you can paste it manually!");
     }
   };
-      
-      if (!whatsappWindow) {
-        // If popup blocked, try direct link
-        toast.warning("Please allow popups and try again");
-        window.location.href = whatsappUrl;
-      } else {
-        toast.info("WhatsApp opened! Come back here after sharing to redeem.");
-      }
-      
-    } catch (error) {
-      console.error("WhatsApp share error:", error);
-      toast.error("Failed to open WhatsApp. Link is copied - you can paste it manually!");
-    }
-  };
 
   const handleRedeem = async () => {
     if (!coupon) return;
