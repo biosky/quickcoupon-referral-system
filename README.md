@@ -48,5 +48,3 @@ npm start
 ## 🚀 Deploy on Render
 
 See deployment instructions in the documentation.
-
-Built with ❤️ using Emergent AI
