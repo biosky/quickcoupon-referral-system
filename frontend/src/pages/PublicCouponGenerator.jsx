@@ -68,40 +68,41 @@ const PublicCouponGenerator = () => {
         shopkeeper_id: id
       });
       setCoupon(response.data);
-      setClickCount(response.data.click_count || 0);
+      setShareClicked(response.data.share_clicked || false);
     } catch (error) {
       toast.error(error.response?.data?.detail || "Failed to generate coupon");
     }
     setLoading(false);
   };
 
-  const handleCopyLink = async () => {
+  const handleWhatsAppShare = async () => {
     if (!coupon) return;
 
     const link = `${window.location.origin}/#/coupon/${coupon.coupon_code}`;
     
     try {
+      // Copy link to clipboard
       await navigator.clipboard.writeText(link);
+      toast.success("Link copied to clipboard!");
       
-      // Track click (no customer data needed)
-      const response = await axios.post(`${API}/public/track-click`, {
+      // Track share in backend
+      await axios.post(`${API}/public/track-share`, {
         coupon_code: coupon.coupon_code
       });
 
-      const newClickCount = response.data.click_count;
-      setClickCount(newClickCount);
-      toast.success(`Link copied! (Click ${newClickCount}/3)`);
-
-      // Check if can redeem
-      if (newClickCount >= 3 && !redeemEnabled) {
-        toast.info("Processing... Please wait");
-        setTimeout(() => {
-          setRedeemEnabled(true);
-          toast.success("You can now redeem your cashback!");
-        }, 2500);
-      }
+      setShareClicked(true);
+      
+      // Create WhatsApp message
+      const message = `🎉 Hey! Check out this amazing offer from ${shopInfo?.store_name || 'our store'}!\n\n💰 ${shopInfo?.cashback_offer || 'Special offer'}\n\n🔗 Use my coupon: ${link}\n\nGenerated via QuickCoupon`;
+      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      
+      // Open WhatsApp
+      window.open(whatsappUrl, '_blank');
+      
+      toast.info("Share with your friends on WhatsApp!");
+      
     } catch (error) {
-      toast.error("Failed to copy link");
+      toast.error("Failed to process share");
     }
   };
 
