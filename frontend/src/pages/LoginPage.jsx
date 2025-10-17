@@ -235,6 +235,15 @@ const LoginPage = ({ setUser }) => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Adsterra Ad */}
+        {ADS_ENABLED && AD_CONTAINER && (
+          <Card className="mt-6">
+            <CardContent className="p-4 flex justify-center">
+              <div id={AD_CONTAINER}></div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
