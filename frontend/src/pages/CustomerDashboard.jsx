@@ -190,22 +190,25 @@ const CustomerDashboard = ({ user, onLogout }) => {
               <Gift className="w-5 h-5" />
               Create New Coupon
             </CardTitle>
-            <CardDescription>Select a store and create your referral coupon</CardDescription>
+            <CardDescription>Enter the unique Shopkeeper ID provided by the store</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Select value={selectedShopkeeper} onValueChange={setSelectedShopkeeper}>
-                <SelectTrigger data-testid="shopkeeper-select">
-                  <SelectValue placeholder="Select a store" />
-                </SelectTrigger>
-                <SelectContent>
-                  {shopkeepers.map((shop) => (
-                    <SelectItem key={shop.id} value={shop.id}>
-                      {shop.store_name} - {shop.cashback_offer}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <label htmlFor="shopkeeper-id" className="block text-sm font-medium mb-2">
+                Shopkeeper ID
+              </label>
+              <Input
+                id="shopkeeper-id"
+                data-testid="shopkeeper-id-input"
+                type="text"
+                value={selectedShopkeeper}
+                onChange={(e) => setSelectedShopkeeper(e.target.value)}
+                placeholder="Enter Shopkeeper ID (e.g., abc123...)"
+                className="w-full"
+              />
+              <p className="text-xs text-gray-500 mt-2">
+                💡 Ask the shopkeeper for their unique ID or scan their QR code
+              </p>
             </div>
             <Button onClick={handleCreateCoupon} disabled={loading} className="w-full" data-testid="create-coupon-btn">
               {loading ? "Creating..." : "Create Coupon"}
