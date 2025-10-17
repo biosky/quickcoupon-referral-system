@@ -177,6 +177,14 @@ const CustomerDashboard = ({ user, onLogout }) => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+        {/* Top Banner Ad - Small and Non-intrusive */}
+        {ADS_ENABLED && AD_CONTAINER && (
+          <div className="bg-white rounded-lg border border-gray-200 p-3 shadow-sm">
+            <div className="text-xs text-gray-400 text-center mb-2">Sponsored</div>
+            <div id={AD_CONTAINER} className="flex justify-center"></div>
+          </div>
+        )}
+
         {/* CASHBACK Banner */}
         <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-6 text-center shadow-lg">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">CASHBACK / COMBO</h2>
