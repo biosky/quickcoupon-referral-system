@@ -177,29 +177,81 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleUpdateProfile} className="space-y-6">
-                  {/* Shopkeeper ID Display */}
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <Label className="text-sm font-semibold text-blue-900 mb-2 block">Your Unique Shopkeeper ID</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        value={user.id}
-                        readOnly
-                        className="bg-white font-mono text-sm"
+                  {/* Shopkeeper QR Code & ID Display */}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-6">
+                    <Label className="text-lg font-bold text-blue-900 mb-4 block text-center">Customer QR Code</Label>
+                    
+                    {/* QR Code Display */}
+                    <div className="bg-white p-6 rounded-lg shadow-md mb-4 flex justify-center">
+                      <QRCode 
+                        value={`${window.location.origin}/#/create-coupon?shopkeeper_id=${user.id}`}
+                        size={200}
+                        level="H"
                       />
-                      <Button
-                        type="button"
-                        onClick={() => {
-                          navigator.clipboard.writeText(user.id);
-                          toast.success("ID copied to clipboard!");
-                        }}
-                        variant="outline"
-                      >
-                        <Copy className="w-4 h-4" />
-                      </Button>
                     </div>
-                    <p className="text-xs text-blue-700 mt-2">
-                      📋 Share this ID with customers so they can create coupons for your store
-                    </p>
+                    
+                    <div className="text-center mb-4">
+                      <p className="text-sm font-semibold text-blue-900 mb-2">📱 Customers can scan this QR code</p>
+                      <p className="text-xs text-blue-700">
+                        It will take them directly to the coupon creation page with your store pre-selected
+                      </p>
+                    </div>
+
+                    {/* Download QR Code Button */}
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        const svg = document.querySelector('#shopkeeper-qr-code svg');
+                        if (svg) {
+                          const svgData = new XMLSerializer().serializeToString(svg);
+                          const canvas = document.createElement('canvas');
+                          const ctx = canvas.getContext('2d');
+                          const img = new Image();
+                          img.onload = () => {
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0);
+                            const pngFile = canvas.toDataURL('image/png');
+                            const downloadLink = document.createElement('a');
+                            downloadLink.download = `${profileForm.store_name || 'store'}-qr-code.png`;
+                            downloadLink.href = pngFile;
+                            downloadLink.click();
+                          };
+                          img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+                        }
+                        toast.success("QR Code downloaded!");
+                      }}
+                      className="w-full mb-3"
+                      variant="outline"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download QR Code
+                    </Button>
+
+                    {/* ID for manual entry */}
+                    <div className="border-t pt-4">
+                      <Label className="text-xs text-gray-600 mb-2 block">Or share your Shopkeeper ID:</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          value={user.id}
+                          readOnly
+                          className="bg-white font-mono text-xs"
+                        />
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard.writeText(user.id);
+                            toast.success("ID copied!");
+                          }}
+                          variant="outline"
+                          size="sm"
+                        >
+                          <Copy className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
 
                   <div>
