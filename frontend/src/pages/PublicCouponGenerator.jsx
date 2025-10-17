@@ -15,24 +15,25 @@ const API = `${BACKEND_URL}/api`;
 
 const PublicCouponGenerator = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [shopkeeperId, setShopkeeperId] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [customerName, setCustomerName] = useState("");
   const [coupon, setCoupon] = useState(null);
   const [clickCount, setClickCount] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showCongrats, setShowCongrats] = useState(false);
   const [redeemEnabled, setRedeemEnabled] = useState(false);
   const [shopInfo, setShopInfo] = useState(null);
 
   useEffect(() => {
-    // Get shopkeeper_id from URL
+    // Get shopkeeper_id from URL and auto-generate coupon
     const params = new URLSearchParams(location.search);
     const id = params.get('shopkeeper_id');
     if (id) {
       setShopkeeperId(id);
       fetchShopInfo(id);
+      autoGenerateCoupon(id);
+    } else {
+      setLoading(false);
+      toast.error("Invalid QR code - missing shopkeeper ID");
     }
   }, [location]);
 
@@ -45,23 +46,14 @@ const PublicCouponGenerator = () => {
     }
   };
 
-  const handleGenerateCoupon = async (e) => {
-    e.preventDefault();
-    if (!shopkeeperId || !customerPhone) {
-      toast.error("Please enter your phone number");
-      return;
-    }
-
+  const autoGenerateCoupon = async (id) => {
     setLoading(true);
     try {
       const response = await axios.post(`${API}/public/generate-coupon`, {
-        shopkeeper_id: shopkeeperId,
-        customer_phone: customerPhone,
-        customer_name: customerName || "Customer"
+        shopkeeper_id: id
       });
       setCoupon(response.data);
       setClickCount(response.data.click_count || 0);
-      toast.success("Coupon generated successfully!");
     } catch (error) {
       toast.error(error.response?.data?.detail || "Failed to generate coupon");
     }
