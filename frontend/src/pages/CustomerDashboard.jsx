@@ -216,6 +216,16 @@ const CustomerDashboard = ({ user, onLogout }) => {
           </CardContent>
         </Card>
 
+        {/* Subtle Ad - Between Sections */}
+        {ADS_ENABLED && AD_CONTAINER && (
+          <div className="my-6 flex justify-center">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 max-w-2xl w-full">
+              <div className="text-xs text-gray-400 mb-2 text-center">Advertisement</div>
+              <div id={`${AD_CONTAINER}-between`} className="flex justify-center"></div>
+            </div>
+          </div>
+        )}
+
         {/* My Coupons */}
         <Card className="shadow-lg">
           <CardHeader>
