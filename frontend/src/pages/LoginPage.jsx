@@ -219,10 +219,29 @@ const LoginPage = ({ setUser }) => {
         </Card>
 
         {/* Adsterra Ad */}
-        {ADS_ENABLED && AD_CONTAINER && (
+        {ADS_ENABLED && AD_KEY && (
           <Card className="mt-6">
-            <CardContent className="p-4 flex justify-center">
-              <div id={AD_CONTAINER}></div>
+            <CardContent className="p-4">
+              <div className="text-xs text-gray-400 text-center mb-2">Advertisement</div>
+              <script 
+                type="text/javascript" 
+                dangerouslySetInnerHTML={{
+                  __html: `
+                    atOptions = {
+                      'key' : '${AD_KEY}',
+                      'format' : 'iframe',
+                      'height' : 250,
+                      'width' : 300,
+                      'params' : {}
+                    };
+                  `
+                }}
+              />
+              <script 
+                type="text/javascript" 
+                src={`//pl27869165.effectivegatecpm.com/${AD_KEY}/invoke.js`}
+                async
+              />
             </CardContent>
           </Card>
         )}
