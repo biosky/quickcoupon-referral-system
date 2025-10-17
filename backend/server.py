@@ -485,33 +485,23 @@ async def get_shopkeeper_info(shopkeeper_id: str):
 
 @api_router.post("/public/generate-coupon")
 async def generate_coupon_public(data: dict):
-    """Generate coupon without login - customer provides phone number"""
+    """Generate coupon without login - no customer data required"""
     shopkeeper_id = data.get('shopkeeper_id')
-    customer_phone = data.get('customer_phone')
-    customer_name = data.get('customer_name', 'Customer')
     
-    if not shopkeeper_id or not customer_phone:
-        raise HTTPException(status_code=400, detail="Shopkeeper ID and phone number required")
+    if not shopkeeper_id:
+        raise HTTPException(status_code=400, detail="Shopkeeper ID required")
     
-    # Check if coupon already exists for this phone and shopkeeper
-    existing_coupon = await db.coupons.find_one({
-        "customer_phone": customer_phone,
-        "shopkeeper_id": shopkeeper_id
-    })
+    # Create new anonymous coupon with unique ID
+    anonymous_customer_id = f"anonymous_{uuid.uuid4().hex[:12]}"
     
-    if existing_coupon:
-        return Coupon(**existing_coupon)
-    
-    # Create new coupon
     coupon = Coupon(
-        customer_id=customer_phone,  # Use phone as customer ID
+        customer_id=anonymous_customer_id,
         shopkeeper_id=shopkeeper_id
     )
     
     coupon_dict = coupon.model_dump()
     coupon_dict['created_at'] = coupon_dict['created_at'].isoformat()
-    coupon_dict['customer_phone'] = customer_phone
-    coupon_dict['customer_name'] = customer_name
+    coupon_dict['share_clicked'] = False  # Track if WhatsApp share was clicked
     
     await db.coupons.insert_one(coupon_dict)
     
