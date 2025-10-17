@@ -507,34 +507,31 @@ async def generate_coupon_public(data: dict):
     
     return coupon
 
-@api_router.post("/public/track-click")
-async def track_click_public(data: dict):
-    """Track click without login"""
+@api_router.post("/public/track-share")
+async def track_whatsapp_share(data: dict):
+    """Track WhatsApp share button click"""
     coupon_code = data.get('coupon_code')
-    customer_phone = data.get('customer_phone')
     
-    if not coupon_code or not customer_phone:
-        raise HTTPException(status_code=400, detail="Coupon code and phone number required")
+    if not coupon_code:
+        raise HTTPException(status_code=400, detail="Coupon code required")
     
-    coupon = await db.coupons.find_one({"coupon_code": coupon_code, "customer_phone": customer_phone})
+    coupon = await db.coupons.find_one({"coupon_code": coupon_code})
     if not coupon:
         raise HTTPException(status_code=404, detail="Coupon not found")
     
     if coupon['is_redeemed']:
-        return {"message": "Coupon already redeemed", "already_redeemed": True, "click_count": coupon['click_count']}
+        return {"message": "Coupon already redeemed", "already_redeemed": True, "share_clicked": True}
     
-    # Increment click count
-    new_click_count = coupon['click_count'] + 1
-    
+    # Mark that share button was clicked
     await db.coupons.update_one(
         {"coupon_code": coupon_code},
-        {"$set": {"click_count": new_click_count}}
+        {"$set": {"share_clicked": True}}
     )
     
     return {
-        "message": "Click tracked successfully",
-        "click_count": new_click_count,
-        "can_redeem": new_click_count >= 3,
+        "message": "Share tracked successfully",
+        "share_clicked": True,
+        "can_redeem": True,
         "is_redeemed": False
     }
 
