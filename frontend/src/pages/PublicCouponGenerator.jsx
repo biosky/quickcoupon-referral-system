@@ -58,6 +58,9 @@ const PublicCouponGenerator = () => {
       setShopInfo(response.data);
     } catch (error) {
       console.error("Error fetching shop info:", error);
+      if (error.response?.status === 404) {
+        toast.error("Invalid QR code - shopkeeper not found");
+      }
     }
   };
 
