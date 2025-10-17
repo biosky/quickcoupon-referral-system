@@ -186,6 +186,19 @@ async def signup(user_create: UserCreate):
     
     await db.users.insert_one(user_dict)
     
+    # Create default profile for shopkeepers
+    if user_create.role == 'shopkeeper':
+        default_profile = {
+            "shopkeeper_id": user.id,
+            "store_name": f"{user_create.username}'s Store",
+            "cashback_offer": "Special offer available",
+            "store_description": "Welcome to our store!",
+            "promotional_image": None,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.shopkeeper_profiles.insert_one(default_profile)
+    
     # Create access token
     access_token = create_access_token(data={"sub": user.id})
     
