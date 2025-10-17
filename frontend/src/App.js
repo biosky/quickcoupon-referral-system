@@ -87,6 +87,9 @@ function App() {
           
           <Route path="/coupon/:couponCode" element={<PublicCouponPage />} />
           
+          {/* Public Coupon Generator - No login required */}
+          <Route path="/generate" element={<PublicCouponGenerator />} />
+          
           <Route path="/" element={
             user ? 
               (user.role === 'customer' ? <Navigate to="/customer" /> : <Navigate to="/shopkeeper" />) 
