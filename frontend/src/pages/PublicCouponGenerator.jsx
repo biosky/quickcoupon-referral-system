@@ -81,7 +81,7 @@ const PublicCouponGenerator = () => {
     const link = `${window.location.origin}/#/coupon/${coupon.coupon_code}`;
     
     try {
-      // Copy link to clipboard
+      // Copy link to clipboard first
       await navigator.clipboard.writeText(link);
       toast.success("Link copied to clipboard!");
       
@@ -101,22 +101,23 @@ const PublicCouponGenerator = () => {
 
 Generated via QuickCoupon`;
       
-      // Use mobile-friendly WhatsApp URL (works on both mobile and desktop)
+      // Use WhatsApp URL that works on both mobile and desktop
       const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
       
-      // Open WhatsApp - use location.href on mobile for better compatibility
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (isMobile) {
+      // Always open in new tab/window to avoid navigation issues
+      const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      
+      if (!whatsappWindow) {
+        // If popup blocked, try direct link
+        toast.warning("Please allow popups and try again");
         window.location.href = whatsappUrl;
       } else {
-        window.open(whatsappUrl, '_blank');
+        toast.info("WhatsApp opened! Come back here after sharing to redeem.");
       }
-      
-      toast.info("Opening WhatsApp...");
       
     } catch (error) {
       console.error("WhatsApp share error:", error);
-      toast.error("Failed to open WhatsApp");
+      toast.error("Failed to open WhatsApp. Link is copied - you can paste it manually!");
     }
   };
 
