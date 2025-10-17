@@ -85,10 +85,10 @@ function App() {
               : <Navigate to="/login" />
           } />
           
+          {/* Public routes - No login required */}
           <Route path="/coupon/:couponCode" element={<PublicCouponPage />} />
-          
-          {/* Public Coupon Generator - No login required */}
           <Route path="/generate" element={<PublicCouponGenerator />} />
+          <Route path="/generate-coupon" element={<PublicCouponGenerator />} />
           
           <Route path="/" element={
             user ? 
