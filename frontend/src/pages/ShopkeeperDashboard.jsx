@@ -176,6 +176,31 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleUpdateProfile} className="space-y-6">
+                  {/* Shopkeeper ID Display */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <Label className="text-sm font-semibold text-blue-900 mb-2 block">Your Unique Shopkeeper ID</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        value={user.id}
+                        readOnly
+                        className="bg-white font-mono text-sm"
+                      />
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(user.id);
+                          toast.success("ID copied to clipboard!");
+                        }}
+                        variant="outline"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <p className="text-xs text-blue-700 mt-2">
+                      📋 Share this ID with customers so they can create coupons for your store
+                    </p>
+                  </div>
+
                   <div>
                     <Label htmlFor="store_name">Store Name</Label>
                     <Input
