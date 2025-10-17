@@ -71,6 +71,12 @@ function App() {
               <CustomerDashboard user={user} onLogout={handleLogout} /> 
               : <Navigate to="/login" />
           } />
+
+          <Route path="/create-coupon" element={
+            user && user.role === 'customer' ? 
+              <CustomerDashboard user={user} onLogout={handleLogout} /> 
+              : <Navigate to="/login" />
+          } />
           
           <Route path="/shopkeeper" element={
             user && user.role === 'shopkeeper' ? 
