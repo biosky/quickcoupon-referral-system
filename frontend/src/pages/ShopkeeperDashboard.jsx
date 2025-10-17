@@ -184,7 +184,7 @@ const ShopkeeperDashboard = ({ user, onLogout }) => {
                     {/* QR Code Display */}
                     <div id="shopkeeper-qr-code" className="bg-white p-6 rounded-lg shadow-md mb-4 flex justify-center">
                       <QRCode 
-                        value={`${window.location.origin}/#/create-coupon?shopkeeper_id=${user.id}`}
+                        value={`${window.location.origin}/#/generate?shopkeeper_id=${user.id}`}
                         size={200}
                         level="H"
                       />
