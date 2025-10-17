@@ -153,51 +153,105 @@ backend:
 frontend:
   - task: "Remove customer data input from PublicCouponGenerator"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Removed customer name and phone number input form. Coupon now auto-generates on page load without any user data collection."
+      - working: true
+        agent: "user"
+        comment: "USER CONFIRMED: Everything working fine! Coupon auto-generates without data input."
   
   - task: "Implement WhatsApp share button with link copy"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Added WhatsApp share button that copies link to clipboard and opens WhatsApp with pre-filled message including store name, cashback offer, and coupon link. Uses WhatsApp URL scheme (wa.me)."
+      - working: false
+        agent: "user"
+        comment: "USER REPORTED: WhatsApp not opening, getting logged out automatically"
+      - working: true
+        agent: "main"
+        comment: "FIXED: Changed to api.whatsapp.com/send URL, opens in new tab to prevent logout"
+      - working: true
+        agent: "user"
+        comment: "USER CONFIRMED: WhatsApp opening correctly, no logout issues!"
   
   - task: "Implement Page Visibility API for return detection"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Added Page Visibility API listener to detect when customer returns from WhatsApp. Shows success toast and enables redeem button automatically on return."
+      - working: true
+        agent: "user"
+        comment: "USER CONFIRMED: Return detection working, redeem button appears!"
   
   - task: "Update UI flow and How It Works section"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Updated UI to show: 1) Auto-generated coupon, 2) WhatsApp share button, 3) Share confirmation message, 4) Redeem button after return. Updated How It Works to reflect new flow."
+      - working: true
+        agent: "user"
+        comment: "USER CONFIRMED: UI flow working perfectly!"
+  
+  - task: "Display promotional image on PublicCouponGenerator"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "USER REPORTED: Promotional image not rendering"
+      - working: true
+        agent: "main"
+        comment: "FIXED: Added image display with proper styling, max-height, and responsive design"
+      - working: true
+        agent: "user"
+        comment: "USER CONFIRMED: Image displaying correctly!"
+  
+  - task: "Fix QR code routing to PublicCouponGenerator"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "USER REPORTED: QR code redirecting to login page"
+      - working: true
+        agent: "main"
+        comment: "FIXED: Added both /generate and /generate-coupon routes"
+      - working: true
+        agent: "user"
+        comment: "USER CONFIRMED: QR code routing working!"
 
 metadata:
   created_by: "main_agent"
