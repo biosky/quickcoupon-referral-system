@@ -68,10 +68,9 @@ const PublicCouponGenerator = () => {
     try {
       await navigator.clipboard.writeText(link);
       
-      // Track click
+      // Track click (no customer data needed)
       const response = await axios.post(`${API}/public/track-click`, {
-        coupon_code: coupon.coupon_code,
-        customer_phone: customerPhone
+        coupon_code: coupon.coupon_code
       });
 
       const newClickCount = response.data.click_count;
@@ -97,8 +96,7 @@ const PublicCouponGenerator = () => {
     setLoading(true);
     try {
       const response = await axios.post(`${API}/public/redeem-coupon`, {
-        coupon_code: coupon.coupon_code,
-        customer_phone: customerPhone
+        coupon_code: coupon.coupon_code
       });
 
       if (response.data.is_redeemed) {
