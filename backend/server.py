@@ -470,6 +470,123 @@ async def get_all_shopkeepers():
     
     return result
 
+@api_router.get("/public/shopkeeper/{shopkeeper_id}")
+async def get_shopkeeper_info(shopkeeper_id: str):
+    """Get shopkeeper info by ID"""
+    profile = await db.shopkeeper_profiles.find_one({"shopkeeper_id": shopkeeper_id}, {"_id": 0})
+    if not profile:
+        raise HTTPException(status_code=404, detail="Shopkeeper not found")
+    
+    return {
+        "store_name": profile.get('store_name', 'Store'),
+        "cashback_offer": profile.get('cashback_offer', 'No offer'),
+        "store_description": profile.get('store_description', '')
+    }
+
+@api_router.post("/public/generate-coupon")
+async def generate_coupon_public(data: dict):
+    """Generate coupon without login - customer provides phone number"""
+    shopkeeper_id = data.get('shopkeeper_id')
+    customer_phone = data.get('customer_phone')
+    customer_name = data.get('customer_name', 'Customer')
+    
+    if not shopkeeper_id or not customer_phone:
+        raise HTTPException(status_code=400, detail="Shopkeeper ID and phone number required")
+    
+    # Check if coupon already exists for this phone and shopkeeper
+    existing_coupon = await db.coupons.find_one({
+        "customer_phone": customer_phone,
+        "shopkeeper_id": shopkeeper_id
+    })
+    
+    if existing_coupon:
+        return Coupon(**existing_coupon)
+    
+    # Create new coupon
+    coupon = Coupon(
+        customer_id=customer_phone,  # Use phone as customer ID
+        shopkeeper_id=shopkeeper_id
+    )
+    
+    coupon_dict = coupon.model_dump()
+    coupon_dict['created_at'] = coupon_dict['created_at'].isoformat()
+    coupon_dict['customer_phone'] = customer_phone
+    coupon_dict['customer_name'] = customer_name
+    
+    await db.coupons.insert_one(coupon_dict)
+    
+    return coupon
+
+@api_router.post("/public/track-click")
+async def track_click_public(data: dict):
+    """Track click without login"""
+    coupon_code = data.get('coupon_code')
+    customer_phone = data.get('customer_phone')
+    
+    if not coupon_code or not customer_phone:
+        raise HTTPException(status_code=400, detail="Coupon code and phone number required")
+    
+    coupon = await db.coupons.find_one({"coupon_code": coupon_code, "customer_phone": customer_phone})
+    if not coupon:
+        raise HTTPException(status_code=404, detail="Coupon not found")
+    
+    if coupon['is_redeemed']:
+        return {"message": "Coupon already redeemed", "already_redeemed": True, "click_count": coupon['click_count']}
+    
+    # Increment click count
+    new_click_count = coupon['click_count'] + 1
+    
+    await db.coupons.update_one(
+        {"coupon_code": coupon_code},
+        {"$set": {"click_count": new_click_count}}
+    )
+    
+    return {
+        "message": "Click tracked successfully",
+        "click_count": new_click_count,
+        "can_redeem": new_click_count >= 3,
+        "is_redeemed": False
+    }
+
+@api_router.post("/public/redeem-coupon")
+async def redeem_coupon_public(data: dict):
+    """Redeem coupon without login"""
+    coupon_code = data.get('coupon_code')
+    customer_phone = data.get('customer_phone')
+    
+    if not coupon_code or not customer_phone:
+        raise HTTPException(status_code=400, detail="Coupon code and phone number required")
+    
+    coupon = await db.coupons.find_one({"coupon_code": coupon_code, "customer_phone": customer_phone})
+    if not coupon:
+        raise HTTPException(status_code=404, detail="Coupon not found")
+    
+    if coupon['is_redeemed']:
+        return {"message": "Coupon already redeemed", "already_redeemed": True}
+    
+    if coupon['click_count'] < 3:
+        raise HTTPException(status_code=400, detail="You need to click Copy Link 3 times before redeeming")
+    
+    # Get shopkeeper profile for cashback offer
+    profile = await db.shopkeeper_profiles.find_one({"shopkeeper_id": coupon['shopkeeper_id']})
+    cashback_offer = profile.get('cashback_offer', 'No offer') if profile else 'No offer'
+    
+    # Redeem coupon
+    await db.coupons.update_one(
+        {"coupon_code": coupon_code},
+        {"$set": {
+            "is_redeemed": True,
+            "cashback_earned": cashback_offer,
+            "redeemed_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    return {
+        "message": "Coupon redeemed successfully",
+        "is_redeemed": True,
+        "cashback_earned": cashback_offer
+    }
+
 
 @api_router.get("/")
 async def root():
