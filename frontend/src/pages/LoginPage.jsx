@@ -26,6 +26,23 @@ const LoginPage = ({ setUser }) => {
   });
   const [loading, setLoading] = useState(false);
 
+  // Load Adsterra ad script
+  useEffect(() => {
+    if (ADS_ENABLED && AD_SCRIPT) {
+      const script = document.createElement('script');
+      script.src = AD_SCRIPT;
+      script.async = true;
+      script.setAttribute('data-cfasync', 'false');
+      document.body.appendChild(script);
+
+      return () => {
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
+    }
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
