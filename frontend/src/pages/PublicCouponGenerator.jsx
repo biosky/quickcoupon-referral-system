@@ -15,11 +15,11 @@ const PublicCouponGenerator = () => {
   const location = useLocation();
   const [shopkeeperId, setShopkeeperId] = useState("");
   const [coupon, setCoupon] = useState(null);
-  const [clickCount, setClickCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showCongrats, setShowCongrats] = useState(false);
   const [redeemEnabled, setRedeemEnabled] = useState(false);
   const [shopInfo, setShopInfo] = useState(null);
+  const [shareClicked, setShareClicked] = useState(false);
 
   useEffect(() => {
     // Get shopkeeper_id from URL and auto-generate coupon
@@ -34,6 +34,23 @@ const PublicCouponGenerator = () => {
       toast.error("Invalid QR code - missing shopkeeper ID");
     }
   }, [location]);
+
+  // Page Visibility API - detect when customer returns from WhatsApp
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && shareClicked && !redeemEnabled) {
+        // Customer returned to the page after sharing
+        toast.success("Welcome back! You can now redeem your cashback!");
+        setRedeemEnabled(true);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [shareClicked, redeemEnabled]);
 
   const fetchShopInfo = async (id) => {
     try {
