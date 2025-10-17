@@ -191,6 +191,8 @@ Generated via QuickCoupon`;
       if (response.data.is_redeemed) {
         setCoupon({ ...coupon, is_redeemed: true, cashback_earned: response.data.cashback_earned });
         setShowCongrats(true);
+        // Clear localStorage after successful redemption
+        localStorage.removeItem(`share_${coupon.coupon_code}`);
       }
     } catch (error) {
       toast.error(error.response?.data?.detail || "Failed to redeem coupon");
