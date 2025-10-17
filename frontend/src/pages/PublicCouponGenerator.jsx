@@ -246,19 +246,19 @@ const PublicCouponGenerator = () => {
           <CardContent className="text-white/90 space-y-2">
             <div className="flex items-start gap-2">
               <span className="font-bold">1.</span>
-              <span>Enter your phone number to generate coupon</span>
+              <span>Scan QR code to generate your unique coupon instantly</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="font-bold">2.</span>
-              <span>Click "Copy Link" button 3 times to share with friends</span>
+              <span>Click "Share via WhatsApp" to share with your friends</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="font-bold">3.</span>
-              <span>After 3rd click, redeem button activates</span>
+              <span>Return to this page after sharing</span>
             </div>
             <div className="flex items-start gap-2">
               <span className="font-bold">4.</span>
-              <span>Click "Redeem" to earn your cashback!</span>
+              <span>Click "Redeem Cashback" to claim your reward!</span>
             </div>
           </CardContent>
         </Card>
