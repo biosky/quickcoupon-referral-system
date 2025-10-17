@@ -101,3 +101,113 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Build a referral coupon system with WhatsApp sharing. Customers scan QR code, generate coupon instantly (no login/data required), share via WhatsApp with pre-filled message, and redeem cashback after returning to the app."
+
+backend:
+  - task: "Remove customer data requirements from public endpoints"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Modified /api/public/generate-coupon to create anonymous coupons without requiring customer phone or name. Added share_clicked field to track WhatsApp sharing."
+  
+  - task: "Create WhatsApp share tracking endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created new endpoint /api/public/track-share to mark when customer clicks WhatsApp share button. Removed old track-click endpoint that required 3 clicks."
+  
+  - task: "Update redeem endpoint to check share status"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Modified /api/public/redeem-coupon to check if share_clicked is true instead of checking click_count >= 3. Removed customer_phone requirement."
+
+frontend:
+  - task: "Remove customer data input from PublicCouponGenerator"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Removed customer name and phone number input form. Coupon now auto-generates on page load without any user data collection."
+  
+  - task: "Implement WhatsApp share button with link copy"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added WhatsApp share button that copies link to clipboard and opens WhatsApp with pre-filled message including store name, cashback offer, and coupon link. Uses WhatsApp URL scheme (wa.me)."
+  
+  - task: "Implement Page Visibility API for return detection"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added Page Visibility API listener to detect when customer returns from WhatsApp. Shows success toast and enables redeem button automatically on return."
+  
+  - task: "Update UI flow and How It Works section"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/PublicCouponGenerator.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated UI to show: 1) Auto-generated coupon, 2) WhatsApp share button, 3) Share confirmation message, 4) Redeem button after return. Updated How It Works to reflect new flow."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Remove customer data requirements from public endpoints"
+    - "Create WhatsApp share tracking endpoint"
+    - "Update redeem endpoint to check share status"
+    - "Remove customer data input from PublicCouponGenerator"
+    - "Implement WhatsApp share button with link copy"
+    - "Implement Page Visibility API for return detection"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Implemented WhatsApp sharing integration for public coupon generator. Key changes: 1) Backend now creates anonymous coupons without customer data, 2) New /api/public/track-share endpoint replaces old click tracking, 3) Frontend uses WhatsApp URL scheme to open WhatsApp with pre-filled message, 4) Page Visibility API detects customer return and enables redeem button. All high priority tasks need testing. Backend restarted successfully."
